@@ -1,11 +1,34 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import { useState } from 'react';
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { tw } from 'twind';
 
-const inter = Inter({ subsets: ['latin'] })
+const stylObject = {};
 
 export default function Home() {
+  const [column, setColumn] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const [gridCol, setGridCol] = useState('5');
+  const [gridRow, setGridRow] = useState('2');
+  const [gap, setGap] = useState('4');
+
+  function onSetGridCol() {}
+
+  function getGridCol(obj: any, type: string) {
+    let a = {
+      [obj + 'col']: `grid-cols-${obj}`,
+      [obj + 'gap']: `gap-${obj}`,
+      [obj + 'row']: `grid-rows-${obj}`,
+    }[obj + type];
+
+    return a;
+  }
+
+  const spring = {
+    type: 'spring',
+    bounce: 0.25,
+    duration: 0.8,
+  };
+
   return (
     <>
       <Head>
@@ -14,110 +37,115 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+      <main className="w-full h-screen">
+        <div className="flex w-2/3 mx-auto justify-between">
+          <div className="p-4 mt-20 bg-gray-700 rounded-md">
+            <div
+              className={tw`h-full grid ${
+                gridCol ? getGridCol(gridCol, 'col') : getGridCol('4', 'col')
+              } ${gap ? getGridCol(gap, 'gap') : getGridCol('4', 'gap')}
+               ${gridRow ? getGridCol(gridRow, 'row') : getGridCol('2', 'row')} 
+              grid-flow-col
+               bg-white rounded-md`}
             >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+              <AnimatePresence initial={false}>
+                {column.map((col) => {
+                  return (
+                    <motion.div
+                      key={col}
+                      layout
+                      className="w-20 h-20 bg-red-300 rounded-md"
+                      transition={spring}
+                      initial={{ opacity: 0.5, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                    >
+                      {col}
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
+          <div className="p-4 mt-20 bg-gray-200 rounded-md">
+            <div>
+              <label
+                htmlFor="column"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Column
+              </label>
+              <div className="mt-1">
+                <input
+                  type="number"
+                  name="column"
+                  id="column"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  min={1}
+                  max={10}
+                  value={gridCol}
+                  onChange={(e) => setGridCol(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="mt-4">
+              <label
+                htmlFor="column"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Gap
+              </label>
+              <div className="mt-1">
+                <input
+                  type="number"
+                  name="column"
+                  id="column"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  min={1}
+                  max={10}
+                  value={gap}
+                  onChange={(e) => setGap(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="mt-4">
+              <label
+                htmlFor="column"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Row
+              </label>
+              <div className="mt-1">
+                <input
+                  type="number"
+                  name="column"
+                  id="column"
+                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  min={1}
+                  max={10}
+                  value={gridRow}
+                  onChange={(e) => setGridRow(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <p className="text-sm mt-10">Add item</p>
+              <button
+                className="mt-4 p-2 bg-white rounded-lg shadow-md"
+                onClick={() => setColumn((prev) => prev.concat(prev.length))}
+              >
+                +
+              </button>
+              <button
+                className="mt-4 p-2 bg-white rounded-lg shadow-md"
+                onClick={() => setColumn((prev) => prev.slice(0, -1))}
+              >
+                -
+              </button>
+            </div>
           </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
         </div>
       </main>
     </>
-  )
+  );
 }
