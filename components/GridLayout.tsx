@@ -45,7 +45,7 @@ function GridLayout({
   };
 
   return (
-    <div className="p-4 bg-gray-700 rounded-l-md w-3/4">
+    <div className="p-4 bg-gray-700 rounded-l-md h-full sm:w-3/4">
       <div
         className={tw`grid h-full ${
           gridCol ? getGridStyle(gridCol, 'col') : getGridStyle('4', 'col')

@@ -33,7 +33,7 @@ export default function Home() {
         <div className="text-center mt-10">
           <h1 className="text-2xl font-bold font-mono">CSS GRID Playground</h1>
         </div>
-        <div className="flex flex-col sm:flex-row mx-20 mb-20 justify-between">
+        <div className="flex flex-col mx-6 mb-6 sm:flex-row sm:mx-20 sm:mb-20 sm:justify-between">
           <GridLayout
             column={column}
             gridCol={gridCol}

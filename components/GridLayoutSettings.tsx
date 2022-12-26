@@ -27,7 +27,7 @@ function GridLayoutSettings({
   setGridFlow,
 }: Props): JSX.Element {
   return (
-    <div className="p-4 bg-gray-200 rounded-r-md w-1/4">
+    <div className="p-4 bg-gray-200 rounded-r-md sm:w-1/4">
       <div>
         <label
           htmlFor="column"
