@@ -1,5 +1,4 @@
 import { tw } from 'twind';
-import { IndexedObject } from '../types';
 import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
@@ -10,7 +9,7 @@ type Props = {
   setGridCol: Dispatch<SetStateAction<string>>;
   setGap: Dispatch<SetStateAction<string>>;
   setGridRow: Dispatch<SetStateAction<string>>;
-  setColumn: Dispatch<SetStateAction<number[]>>;
+  setColumn: Dispatch<SetStateAction<number[] | []>>;
   setGridFlow: Dispatch<SetStateAction<string>>;
   gap: string;
 };

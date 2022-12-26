@@ -1,15 +1,12 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
-import { tw } from 'twind';
 import GridLayout from '../components/GridLayout';
 import GridLayoutSettings from '../components/GridLayoutSettings';
 import { IndexedObject } from '../types';
-
-const stylObject = {};
+import GridItemSettings from '../components/GridItemSettings';
 
 export default function Home() {
-  const [column, setColumn] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8]);
+  const [column, setColumn] = useState<number[] | []>([]);
   const [gridCol, setGridCol] = useState('4');
   const [gridRow, setGridRow] = useState('4');
   const [gridFlow, setGridFlow] = useState('col');
@@ -19,7 +16,7 @@ export default function Home() {
   const [rowSpan, setRowSpan] = useState<IndexedObject>({});
   const [gap, setGap] = useState('4');
 
-  function onSetGridCol() {}
+  const [settingsLayout, setSettingsLayout] = useState<number | null>(null);
 
   return (
     <>
@@ -44,19 +41,31 @@ export default function Home() {
             colSpan={colSpan}
             rowSpan={rowSpan}
             gap={gap}
+            setSettingsLayout={setSettingsLayout}
           />
-          <GridLayoutSettings
-            column={column}
-            setColumn={setColumn}
-            gridCol={gridCol}
-            gridRow={gridRow}
-            gridFlow={gridFlow}
-            setGridCol={setGridCol}
-            setGridRow={setGridRow}
-            setGridFlow={setGridFlow}
-            gap={gap}
-            setGap={setGap}
-          />
+          {settingsLayout === null ? (
+            <GridLayoutSettings
+              column={column}
+              setColumn={setColumn}
+              gridCol={gridCol}
+              gridRow={gridRow}
+              gridFlow={gridFlow}
+              setGridCol={setGridCol}
+              setGridRow={setGridRow}
+              setGridFlow={setGridFlow}
+              gap={gap}
+              setGap={setGap}
+            />
+          ) : (
+            <GridItemSettings
+              setRowStart={setRowStart}
+              setColStart={setColStart}
+              setColSpan={setColSpan}
+              setRowSpan={setRowSpan}
+              itemIndex={settingsLayout}
+              setSettingsLayout={setSettingsLayout}
+            />
+          )}
         </div>
       </main>
     </>

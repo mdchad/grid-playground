@@ -1,18 +1,20 @@
 import { tw } from 'twind';
 import { AnimatePresence, motion } from 'framer-motion';
-import {IndexedObject} from "../types";
+import { IndexedObject } from '../types';
+import {Dispatch, SetStateAction, useRef} from 'react';
 
 type Props = {
-  column: number[],
-  gridCol: string
-  gridRow: string
-  gridFlow: string
-  colStart: IndexedObject
-  rowStart: IndexedObject
-  colSpan: IndexedObject
-  rowSpan: IndexedObject
-  gap: string
-}
+  column: number[];
+  gridCol: string;
+  gridRow: string;
+  gridFlow: string;
+  colStart: IndexedObject;
+  rowStart: IndexedObject;
+  colSpan: IndexedObject;
+  rowSpan: IndexedObject;
+  gap: string;
+  setSettingsLayout: Dispatch<SetStateAction<number | null>>;
+};
 
 function GridLayout({
   column,
@@ -24,6 +26,7 @@ function GridLayout({
   colSpan,
   rowSpan,
   gap,
+  setSettingsLayout,
 }: Props): JSX.Element {
   function getGridStyle(obj: any, type: string) {
     return {
@@ -47,21 +50,12 @@ function GridLayout({
   return (
     <div className="p-4 bg-gray-700 rounded-l-md h-full sm:w-3/4">
       <div
-        className={tw`grid h-full ${
-          gridCol ? getGridStyle(gridCol, 'col') : getGridStyle('4', 'col')
-        } ${gap ? getGridStyle(gap, 'gap') : getGridStyle('4', 'gap')}
-               ${
-                 gridRow
-                   ? getGridStyle(gridRow, 'row')
-                   : getGridStyle('4', 'row')
-               } 
-               ${
-                 gridFlow
-                   ? getGridStyle(gridFlow, 'flow')
-                   : getGridStyle('col', 'flow')
-               } 
-                bg-stripes bg-stripes-white
-               bg-sky-400 rounded-md`}
+        className={tw`grid h-full
+         ${gridCol && getGridStyle(gridCol, 'col')}
+         ${gap && getGridStyle(gap, 'gap')}
+         ${gridRow && getGridStyle(gridRow, 'row')} 
+         ${gridFlow && getGridStyle(gridFlow, 'flow')} 
+         bg-stripes bg-stripes-white bg-sky-400 rounded-md`}
       >
         <AnimatePresence initial={false}>
           {column.map((col, index) => {
@@ -69,7 +63,7 @@ function GridLayout({
               <motion.div
                 key={col}
                 layout
-                className={tw`${col === 3 && 'row-span-3'} ${
+                className={tw`${
                   Object.keys(colStart).includes('' + col) &&
                   getGridStyle(rowStart[index], 'col-start')
                 } ${
@@ -82,39 +76,14 @@ function GridLayout({
                   Object.keys(colSpan).includes('' + col) &&
                   getGridStyle(colSpan[index], 'col-span')
                 } 
-                      bg-sky-600 font-mono shadow-lg rounded-lg p-4`}
+                bg-sky-600 font-mono shadow-lg flex justify-center items-center rounded-lg p-4`}
                 transition={spring}
                 initial={{ opacity: 0.5, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
+                onClick={(e) => setSettingsLayout(col)}
               >
                 <p className="text-center text-white">0{col}</p>
-                {/*<button*/}
-                {/*  className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"*/}
-                {/*  onClick={() => setRowStart({ ['' + index]: '2' })}*/}
-                {/*>*/}
-                {/*  Row start +*/}
-                {/*</button>*/}
-                {/*<button*/}
-                {/*  className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"*/}
-                {/*  onClick={() => setColStart({ ['' + index]: '2' })}*/}
-                {/*>*/}
-                {/*  Col start +*/}
-                {/*</button>*/}
-                {/*<button*/}
-                {/*  className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"*/}
-                {/*  onClick={() =>*/}
-                {/*    setColSpan((prev: any) => ({ ['' + index]: '3' }))*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  Col span +*/}
-                {/*</button>*/}
-                {/*<button*/}
-                {/*  className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"*/}
-                {/*  onClick={() => setRowSpan({ ['' + index]: '2' })}*/}
-                {/*>*/}
-                {/*  Row span +*/}
-                {/*</button>*/}
               </motion.div>
             );
           })}
