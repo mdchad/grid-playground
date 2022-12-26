@@ -65,7 +65,7 @@ function GridLayout({
                 layout
                 className={tw`${
                   Object.keys(colStart).includes('' + col) &&
-                  getGridStyle(rowStart[index], 'col-start')
+                  getGridStyle(colStart[index], 'col-start')
                 } ${
                   Object.keys(rowStart).includes('' + col) &&
                   getGridStyle(rowStart[index], 'row-start')
@@ -76,14 +76,15 @@ function GridLayout({
                   Object.keys(colSpan).includes('' + col) &&
                   getGridStyle(colSpan[index], 'col-span')
                 } 
-                bg-sky-600 font-mono shadow-lg flex justify-center items-center rounded-lg p-4`}
+                bg-sky-600 font-mono shadow-lg flex justify-center items-center rounded-lg p-4 cursor-pointer`}
                 transition={spring}
                 initial={{ opacity: 0.5, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 onClick={(e) => setSettingsLayout(col)}
               >
-                <p className="text-center text-white">0{col}</p>
+                <p className="text-center text-white">{String(col).padStart(2, '0')
+                }</p>
               </motion.div>
             );
           })}

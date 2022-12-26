@@ -17,6 +17,7 @@ export default function Home() {
   const [rowSpan, setRowSpan] = useState<IndexedObject>({});
   const [gap, setGap] = useState('4');
 
+  console.log(colStart)
   const [settingsLayout, setSettingsLayout] = useState<number | null>(null);
 
   return (
@@ -27,11 +28,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="w-full h-screen grid gap-6 grid-cols-1 grid-rows-[auto_1fr]">
+      <main className="w-full h-screen grid gap-6 grid-cols-1 grid-rows-[auto_1fr_auto]">
         <div className="text-center mt-10">
           <h1 className="text-2xl font-bold font-mono">CSS GRID Playground</h1>
         </div>
-        <div className="flex flex-col mx-6 mb-6 sm:flex-row sm:mx-20 sm:mb-20 sm:justify-between">
+        <div className="flex flex-col mx-6 mb-4 sm:flex-row sm:mx-20 sm:mb-10">
           <GridLayout
             column={column}
             gridCol={gridCol}
@@ -58,6 +59,10 @@ export default function Home() {
                 setGridFlow={setGridFlow}
                 gap={gap}
                 setGap={setGap}
+                setRowStart={setRowStart}
+                setColStart={setColStart}
+                setColSpan={setColSpan}
+                setRowSpan={setRowSpan}
               />
             ) : (
               <GridItemSettings
@@ -72,6 +77,7 @@ export default function Home() {
             )}
           </AnimatePresence>
         </div>
+        <footer className="mb-4 text-center font-mono font-bold text-sm">❤️ Made by Irsyad</footer>
       </main>
     </>
   );
