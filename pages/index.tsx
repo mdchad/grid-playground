@@ -29,11 +29,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="w-full h-screen grid gap-0 grid-cols-1 grid-flow-row">
-        <div className="text-center mt-20">
+      <main className="w-full h-screen grid gap-6 grid-cols-1 grid-rows-[auto_1fr]">
+        <div className="text-center mt-10">
           <h1 className="text-2xl font-bold font-mono">CSS GRID Playground</h1>
         </div>
-        <div className="flex mx-20 mb-20 justify-between row-span-6">
+        <div className="flex flex-col sm:flex-row mx-20 mb-20 justify-between">
           <GridLayout
             column={column}
             gridCol={gridCol}
