@@ -2,6 +2,9 @@ import Head from 'next/head';
 import { useState } from 'react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { tw } from 'twind';
+import GridLayout from '../components/GridLayout';
+import GridLayoutSettings from '../components/GridLayoutSettings';
+import { IndexedObject } from '../types';
 
 const stylObject = {};
 
@@ -10,32 +13,13 @@ export default function Home() {
   const [gridCol, setGridCol] = useState('4');
   const [gridRow, setGridRow] = useState('4');
   const [gridFlow, setGridFlow] = useState('col');
-  const [colStart, setColStart] = useState<any>({});
-  const [rowStart, setRowStart] = useState<any>({});
-  const [colSpan, setColSpan] = useState<any>({});
-  const [rowSpan, setRowSpan] = useState<any>({});
+  const [colStart, setColStart] = useState<IndexedObject>({});
+  const [rowStart, setRowStart] = useState<IndexedObject>({});
+  const [colSpan, setColSpan] = useState<IndexedObject>({});
+  const [rowSpan, setRowSpan] = useState<IndexedObject>({});
   const [gap, setGap] = useState('4');
 
   function onSetGridCol() {}
-
-  function getGridStyle(obj: any, type: string) {
-    return {
-      [obj + 'col']: `grid-cols-${obj}`,
-      [obj + 'gap']: `gap-${obj}`,
-      [obj + 'row']: `grid-rows-${obj}`,
-      [obj + 'flow']: `grid-flow-${obj}`,
-      [obj + 'row-start']: `row-start-${obj}`,
-      [obj + 'col-start']: `col-start-${obj}`,
-      [obj + 'row-span']: `row-span-${obj}`,
-      [obj + 'col-span']: `col-span-${obj}`,
-    }[obj + type];
-  }
-
-  const spring = {
-    type: 'spring',
-    bounce: 0.25,
-    duration: 0.8,
-  };
 
   return (
     <>
@@ -45,208 +29,34 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="w-full h-screen">
+      <main className="w-full h-screen grid gap-0 grid-cols-1 grid-flow-row">
         <div className="text-center mt-20">
           <h1 className="text-2xl font-bold font-mono">CSS GRID Playground</h1>
         </div>
-        <div className="flex w-2/3 mx-auto justify-between">
-          <div className="p-4 mt-20 bg-gray-700 rounded-md">
-            <div
-              className={tw`h-[1000px] w-[800px] grid ${
-                gridCol
-                  ? getGridStyle(gridCol, 'col')
-                  : getGridStyle('4', 'col')
-              } ${gap ? getGridStyle(gap, 'gap') : getGridStyle('4', 'gap')}
-               ${
-                 gridRow
-                   ? getGridStyle(gridRow, 'row')
-                   : getGridStyle('4', 'row')
-               } 
-               ${
-                 gridFlow
-                   ? getGridStyle(gridFlow, 'flow')
-                   : getGridStyle('col', 'flow')
-               } 
-                bg-stripes bg-stripes-white
-               bg-sky-400 rounded-md`}
-            >
-              <AnimatePresence initial={false}>
-                {column.map((col, index) => {
-                  return (
-                    <motion.div
-                      key={col}
-                      layout
-                      className={tw`${
-                        col === 3 && 'row-span-3'
-                      } ${
-                        Object.keys(colStart).includes('' + col) &&
-                        getGridStyle(rowStart[index], 'col-start')
-                      } ${
-                        Object.keys(rowStart).includes('' + col) &&
-                        getGridStyle(rowStart[index], 'row-start')
-                      } ${
-                        Object.keys(rowSpan).includes('' + col) &&
-                        getGridStyle(rowSpan[index], 'row-span')
-                      } ${
-                        Object.keys(colSpan).includes('' + col) &&
-                        getGridStyle(colSpan[index], 'col-span')
-                      } 
-                      bg-sky-600 font-mono shadow-lg rounded-lg p-4`}
-                      transition={spring}
-                      initial={{ opacity: 0.5, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                    >
-                      <p className="text-center text-white">0{col}</p>
-                      <button
-                        className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"
-                        onClick={() => setRowStart({ ['' + index]: '2' })}
-                      >
-                        Row start
-                      </button>
-                      <button
-                        className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"
-                        onClick={() => setColStart({ ['' + index]: '2' })}
-                      >
-                        Col start
-                      </button>
-                      <button
-                        className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"
-                        onClick={() => setColSpan((prev: any) => ({ ['' + index]: '3' }))}
-                      >
-                        Col span
-                      </button>
-                      <button
-                        className="p-2 text-sm rounded-md bg-gray-300 mr-4 mb-2"
-                        onClick={() => setRowSpan({ ['' + index]: '2' })}
-                      >
-                        Row span
-                      </button>
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
-            </div>
-          </div>
-          <div className="p-4 mt-20 bg-gray-200 rounded-md">
-            <div>
-              <label
-                htmlFor="column"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Column
-              </label>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  name="column"
-                  id="column"
-                  className="h-8 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  min={1}
-                  max={10}
-                  value={gridCol}
-                  onChange={(e) => setGridCol(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="mt-4">
-              <label
-                htmlFor="column"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Gap
-              </label>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  name="column"
-                  id="column"
-                  className="h-8 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  min={1}
-                  max={10}
-                  value={gap}
-                  onChange={(e) => setGap(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="mt-4">
-              <label
-                htmlFor="column"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Row
-              </label>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  name="column"
-                  id="column"
-                  className="h-8 p-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  min={1}
-                  max={10}
-                  value={gridRow}
-                  onChange={(e) => setGridRow(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <p className="text-sm mt-10">Add item</p>
-              <button
-                className="mt-4 p-2 bg-white rounded-lg shadow-md"
-                onClick={() => setColumn((prev) => prev.concat(prev.length))}
-              >
-                +
-              </button>
-              <button
-                className="mt-4 p-2 bg-white rounded-lg shadow-md"
-                onClick={() => setColumn((prev) => prev.slice(0, -1))}
-              >
-                -
-              </button>
-            </div>
-            <div className="mt-4 grid grid-cols-4 gap-2">
-              <button
-                className={tw`${
-                  gridFlow === 'row' ? 'bg-amber-300' : 'bg-white'
-                } shadow-md p-2 rounded-md`}
-                onClick={() => setGridFlow('row')}
-              >
-                Row
-              </button>
-              <button
-                className={tw`${
-                  gridFlow === 'col' ? 'bg-amber-300' : 'bg-white'
-                } shadow-md p-2 rounded-md`}
-                onClick={() => setGridFlow('col')}
-              >
-                Col
-              </button>
-              <button
-                className={tw`${
-                  gridFlow === 'dense' ? 'bg-amber-300' : 'bg-white'
-                } shadow-md p-2 rounded-md`}
-                onClick={() => setGridFlow('dense')}
-              >
-                Dense
-              </button>
-              <button
-                className={tw`${
-                  gridFlow === 'row-dense' ? 'bg-amber-300' : 'bg-white'
-                } shadow-md p-2 rounded-md`}
-                onClick={() => setGridFlow('row-dense')}
-              >
-                Row dense
-              </button>
-              <button
-                className={tw`${
-                  gridFlow === 'col-dense' ? 'bg-amber-300' : 'bg-white'
-                } shadow-md p-2 rounded-md`}
-                onClick={() => setGridFlow('col-dense')}
-              >
-                Col dense
-              </button>
-            </div>
-          </div>
+        <div className="flex mx-20 mb-20 justify-between row-span-6">
+          <GridLayout
+            column={column}
+            gridCol={gridCol}
+            gridRow={gridRow}
+            gridFlow={gridFlow}
+            colStart={colStart}
+            rowStart={rowStart}
+            colSpan={colSpan}
+            rowSpan={rowSpan}
+            gap={gap}
+          />
+          <GridLayoutSettings
+            column={column}
+            setColumn={setColumn}
+            gridCol={gridCol}
+            gridRow={gridRow}
+            gridFlow={gridFlow}
+            setGridCol={setGridCol}
+            setGridRow={setGridRow}
+            setGridFlow={setGridFlow}
+            gap={gap}
+            setGap={setGap}
+          />
         </div>
       </main>
     </>
