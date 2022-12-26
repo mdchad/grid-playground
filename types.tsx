@@ -1,4 +1,4 @@
 
 export type IndexedObject = {
-  [key: number]: string
+  [key: number]: number
 }

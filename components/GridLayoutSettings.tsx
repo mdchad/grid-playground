@@ -122,7 +122,7 @@ function GridLayoutSettings({
           <p className="text-sm text-center mr-4 font-semibold">Add item</p>
           <button
             className="hover:bg-amber-100 w-6 h-6 bg-white rounded-md shadow-md mr-2"
-            onClick={() => setColumn((prev) => prev.concat(prev.length))}
+            onClick={() => setColumn((prev: number[]) => prev.concat(prev.length))}
           >
             +
           </button>
