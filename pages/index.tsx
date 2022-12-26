@@ -4,6 +4,7 @@ import GridLayout from '../components/GridLayout';
 import GridLayoutSettings from '../components/GridLayoutSettings';
 import { IndexedObject } from '../types';
 import GridItemSettings from '../components/GridItemSettings';
+import {AnimatePresence} from "framer-motion";
 
 export default function Home() {
   const [column, setColumn] = useState<number[] | []>([]);
@@ -43,29 +44,33 @@ export default function Home() {
             gap={gap}
             setSettingsLayout={setSettingsLayout}
           />
-          {settingsLayout === null ? (
-            <GridLayoutSettings
-              column={column}
-              setColumn={setColumn}
-              gridCol={gridCol}
-              gridRow={gridRow}
-              gridFlow={gridFlow}
-              setGridCol={setGridCol}
-              setGridRow={setGridRow}
-              setGridFlow={setGridFlow}
-              gap={gap}
-              setGap={setGap}
-            />
-          ) : (
-            <GridItemSettings
-              setRowStart={setRowStart}
-              setColStart={setColStart}
-              setColSpan={setColSpan}
-              setRowSpan={setRowSpan}
-              itemIndex={settingsLayout}
-              setSettingsLayout={setSettingsLayout}
-            />
-          )}
+          <AnimatePresence exitBeforeEnter initial={false}>
+            {settingsLayout === null ? (
+              <GridLayoutSettings
+                key={settingsLayout}
+                column={column}
+                setColumn={setColumn}
+                gridCol={gridCol}
+                gridRow={gridRow}
+                gridFlow={gridFlow}
+                setGridCol={setGridCol}
+                setGridRow={setGridRow}
+                setGridFlow={setGridFlow}
+                gap={gap}
+                setGap={setGap}
+              />
+            ) : (
+              <GridItemSettings
+                key={settingsLayout}
+                setRowStart={setRowStart}
+                setColStart={setColStart}
+                setColSpan={setColSpan}
+                setRowSpan={setRowSpan}
+                itemIndex={settingsLayout}
+                setSettingsLayout={setSettingsLayout}
+              />
+            )}
+          </AnimatePresence>
         </div>
       </main>
     </>

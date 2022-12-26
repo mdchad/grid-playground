@@ -1,5 +1,6 @@
 import { tw } from 'twind';
 import { Dispatch, SetStateAction } from 'react';
+import { motion } from 'framer-motion';
 
 type Props = {
   column: number[];
@@ -26,7 +27,7 @@ function GridLayoutSettings({
   setGridFlow,
 }: Props): JSX.Element {
   return (
-    <div className="p-4 bg-gray-100 rounded-r-md sm:w-1/4">
+    <motion.div className="p-4 bg-gray-100 rounded-r-md sm:w-1/4" transition={{ duration: 0.1 }} initial={{ opacity: 0.8}} animate={{ opacity: 1}} exit={{ opacity: 0.5}}>
       <div>
         <label
           htmlFor="column"
@@ -144,7 +145,7 @@ function GridLayoutSettings({
           Col dense
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

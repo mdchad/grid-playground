@@ -1,6 +1,6 @@
-import { tw } from 'twind';
 import {Dispatch, SetStateAction, useRef} from 'react';
 import { IndexedObject } from '../types';
+import { motion } from 'framer-motion';
 
 type Props = {
   setRowStart: Dispatch<SetStateAction<IndexedObject>>;
@@ -45,7 +45,7 @@ function GridLayoutSettings({
   }
 
   return (
-    <div className="p-4 bg-gray-100 rounded-r-md sm:w-1/4">
+    <motion.div className="p-4 bg-gray-100 rounded-r-md sm:w-1/4" transition={{ duration: 0.1 }} initial={{ opacity: 0.8}} animate={{ opacity: 1}} exit={{ opacity: 0.5}}>
       <div>
         <button
           className="mb-5 text-sm"
@@ -123,7 +123,7 @@ function GridLayoutSettings({
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
