@@ -44,11 +44,11 @@ function GridLayoutSettings({
   }
 
   return (
-    <div className="p-4 bg-gray-100 rounded-r-md sm:w-1/4">
+    <div className="p-4 bg-gray-100 rounded-r-md sm:w-1/4 overflow-hidden">
       <motion.div
         transition={{ duration: 0.2 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0, x: -20 }}
+        exit={{ opacity: 0, x: -50 }}
       >
         <div>
           <button
