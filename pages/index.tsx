@@ -1,11 +1,11 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import GridLayout from '../components/GridLayout';
 import GridLayoutSettings from '../components/GridLayoutSettings';
 import { IndexedObject } from '../types';
 import GridItemSettings from '../components/GridItemSettings';
-import {AnimatePresence} from "framer-motion";
-import {SettingsLayout} from "../enum";
+import { AnimatePresence } from 'framer-motion';
+import { SettingsLayout } from '../enum';
 
 export default function Home() {
   const [column, setColumn] = useState<number[] | []>([]);
@@ -18,8 +18,16 @@ export default function Home() {
   const [rowSpan, setRowSpan] = useState<IndexedObject>({});
   const [gap, setGap] = useState('4');
 
-  const [settingsLayout, setSettingsLayout] = useState<SettingsLayout>(SettingsLayout.gridSettings);
+  const [settingsLayout, setSettingsLayout] = useState<SettingsLayout>(
+    SettingsLayout.gridSettings
+  );
   const [settingsItem, setSettingsItem] = useState<number>(0);
+
+  const prevCountRef = useRef<number | null>(null);
+  useEffect(() => {
+    //assign the ref's current value to the count Hook
+    prevCountRef.current = settingsItem;
+  }, [settingsItem]);
 
   return (
     <>
@@ -76,11 +84,14 @@ export default function Home() {
                 setRowSpan={setRowSpan}
                 itemIndex={settingsItem}
                 setSettingsLayout={setSettingsLayout}
+                prevCountRef={prevCountRef}
               />
             )}
           </AnimatePresence>
         </div>
-        <footer className="mb-4 text-center font-mono font-bold text-sm">❤️ Made by Irsyad</footer>
+        <footer className="mb-4 text-center font-mono font-bold text-sm">
+          ❤️ Made by Irsyad
+        </footer>
       </main>
     </>
   );

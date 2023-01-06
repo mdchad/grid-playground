@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import { IndexedObject } from '../types';
-import {motion, Variants} from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { SettingsLayout } from '../enum';
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
   setRowSpan: Dispatch<SetStateAction<IndexedObject>>;
   setSettingsLayout: Dispatch<SetStateAction<SettingsLayout>>;
   itemIndex: number;
+  prevCountRef: MutableRefObject<number | null>;
 };
 
 const itemVariants: Variants = {
@@ -17,20 +18,20 @@ const itemVariants: Variants = {
   show: {
     opacity: 1,
     transition: {
-      type: "spring",
+      type: 'spring',
       bounce: 0,
-      duration: 0.7,
+      duration: 0.4,
       delayChildren: 0.3,
-      staggerChildren: 0.05
-    }
+      staggerChildren: 0.05,
+    },
   },
-  exit: { opacity: 0, x: -20, transition: { duration: 0.1 } }
+  exit: { opacity: 0, x: -20 },
 };
 
 const item = {
   hidden: { opacity: 0 },
-  show: { opacity: 1 }
-}
+  show: { opacity: 1 },
+};
 
 function GridLayoutSettings({
   setRowStart,
@@ -39,6 +40,7 @@ function GridLayoutSettings({
   setRowSpan,
   itemIndex,
   setSettingsLayout,
+  prevCountRef,
 }: Props): JSX.Element {
   function setIncrementValue(prev: any) {
     if (prev[itemIndex]) {
@@ -80,18 +82,53 @@ function GridLayoutSettings({
           >
             &#8592; Back
           </button>
-          <motion.h1
-            className="mb-6 text-center font-bold text-lg font-mono"
-            key={itemIndex}
-            transition={{ duration: 0.3 }}
-            initial={{ opacity: 0.5, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-          >
-            {String(itemIndex).padStart(2, '0')}
-          </motion.h1>
+          {itemIndex.toString().padStart(2, '0').charAt(0) ===
+          prevCountRef?.current?.toString().padStart(2, '0').charAt(0) ? (
+            <div
+              className="flex justify-center mb-6 text-center font-bold text-lg font-mono"
+              key={itemIndex}
+            >
+              <span>
+                {itemIndex.toString().length === 1
+                  ? '0'
+                  : itemIndex.toString().charAt(0)}
+              </span>
+              <motion.div
+                transition={{ duration: 0.4 }}
+                initial={{ opacity: 0.5, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                {itemIndex.toString().length === 1
+                  ? itemIndex
+                  : itemIndex.toString().substring(1)}
+              </motion.div>
+            </div>
+          ) : (
+            <motion.div
+              className="mb-6 text-center font-bold text-lg font-mono"
+              key={itemIndex}
+              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0.5, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+            >
+              <span>
+                {itemIndex.toString().length === 1
+                  ? '0'
+                  : itemIndex.toString().charAt(0)}
+              </span>
+              <span>
+                {itemIndex.toString().length === 1
+                  ? itemIndex
+                  : itemIndex.toString().substring(1)}
+              </span>
+            </motion.div>
+          )}
         </div>
-        <motion.div className="flex align-center justify-between" variants={item}>
+        <motion.div
+          className="flex align-center justify-between"
+          variants={item}
+        >
           <p className="text-sm text-center mr-4 font-semibold">Row Start</p>
           <div>
             <button
@@ -112,7 +149,10 @@ function GridLayoutSettings({
             </button>
           </div>
         </motion.div>
-        <motion.div className="flex align-center justify-between" variants={item}>
+        <motion.div
+          className="flex align-center justify-between"
+          variants={item}
+        >
           <p className="text-sm text-center mr-4 font-semibold">Col Start</p>
           <div>
             <button
@@ -133,7 +173,10 @@ function GridLayoutSettings({
             </button>
           </div>
         </motion.div>
-        <motion.div className="flex align-center justify-between" variants={item}>
+        <motion.div
+          className="flex align-center justify-between"
+          variants={item}
+        >
           <p className="text-sm text-center mr-4 font-semibold">Col span</p>
           <div>
             <button
@@ -150,7 +193,10 @@ function GridLayoutSettings({
             </button>
           </div>
         </motion.div>
-        <motion.div className="flex align-center justify-between" variants={item}>
+        <motion.div
+          className="flex align-center justify-between"
+          variants={item}
+        >
           <p className="text-sm text-center mr-4 font-semibold">Row Span</p>
           <div>
             <button
