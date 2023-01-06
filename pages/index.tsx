@@ -17,7 +17,6 @@ export default function Home() {
   const [rowSpan, setRowSpan] = useState<IndexedObject>({});
   const [gap, setGap] = useState('4');
 
-  console.log(colStart)
   const [settingsLayout, setSettingsLayout] = useState<number | null>(null);
 
   return (
