@@ -2,6 +2,7 @@ import { tw } from 'twind';
 import { AnimatePresence, motion } from 'framer-motion';
 import { IndexedObject } from '../types';
 import {Dispatch, SetStateAction, useRef} from 'react';
+import {SettingsLayout} from "../enum";
 
 type Props = {
   column: number[];
@@ -13,7 +14,9 @@ type Props = {
   colSpan: IndexedObject;
   rowSpan: IndexedObject;
   gap: string;
-  setSettingsLayout: Dispatch<SetStateAction<number | null>>;
+  setSettingsLayout: Dispatch<SetStateAction<SettingsLayout>>;
+  settingsLayout: string;
+  setSettingsItem: Dispatch<SetStateAction<number>>;
 };
 
 function GridLayout({
@@ -27,6 +30,8 @@ function GridLayout({
   rowSpan,
   gap,
   setSettingsLayout,
+  settingsLayout,
+  setSettingsItem
 }: Props): JSX.Element {
   function getGridStyle(obj: any, type: string) {
     return {
@@ -47,6 +52,14 @@ function GridLayout({
     duration: 0.8,
   };
 
+  function setSetting(col: number) {
+    if (settingsLayout === SettingsLayout.gridSettings) {
+      setSettingsLayout(SettingsLayout.itemSettings)
+    }
+
+    setSettingsItem(col)
+  }
+
   return (
     <div className="p-4 bg-gray-700 rounded-l-md h-full sm:w-3/4">
       <div
@@ -58,7 +71,7 @@ function GridLayout({
          bg-stripes bg-stripes-white bg-sky-400 rounded-md`}
       >
         <AnimatePresence initial={false}>
-          {column.map((col, index) => {
+          {column.map((col: number, index: number) => {
             return (
               <motion.div
                 key={col}
@@ -81,7 +94,7 @@ function GridLayout({
                 initial={{ opacity: 0.5, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
-                onClick={(e) => setSettingsLayout(col)}
+                onClick={(e) => setSetting(col)}
               >
                 <p className="text-center text-white">{String(col).padStart(2, '0')
                 }</p>

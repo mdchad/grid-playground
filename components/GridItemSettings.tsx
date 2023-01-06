@@ -1,15 +1,36 @@
-import { Dispatch, SetStateAction, useRef } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { IndexedObject } from '../types';
-import { motion } from 'framer-motion';
+import {motion, Variants} from 'framer-motion';
+import { SettingsLayout } from '../enum';
 
 type Props = {
   setRowStart: Dispatch<SetStateAction<IndexedObject>>;
   setColStart: Dispatch<SetStateAction<IndexedObject>>;
   setColSpan: Dispatch<SetStateAction<IndexedObject>>;
   setRowSpan: Dispatch<SetStateAction<IndexedObject>>;
-  setSettingsLayout: Dispatch<SetStateAction<number | null>>;
+  setSettingsLayout: Dispatch<SetStateAction<SettingsLayout>>;
   itemIndex: number;
 };
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0.7 },
+  show: {
+    opacity: 1,
+    transition: {
+      type: "spring",
+      bounce: 0,
+      duration: 0.7,
+      delayChildren: 0.3,
+      staggerChildren: 0.05
+    }
+  },
+  exit: { opacity: 0, x: -20, transition: { duration: 0.1 } }
+};
+
+const item = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1 }
+}
 
 function GridLayoutSettings({
   setRowStart,
@@ -46,26 +67,35 @@ function GridLayoutSettings({
   return (
     <div className="p-4 bg-gray-100 rounded-r-md sm:w-1/4 overflow-hidden">
       <motion.div
-        transition={{ duration: 0.2 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, x: -50 }}
+        transition={{ duration: 0.1, staggerChildren: 0.5 }}
+        variants={itemVariants}
+        initial="hidden"
+        animate="show"
+        exit="exit"
       >
         <div>
           <button
             className="mb-5 text-sm"
-            onClick={() => setSettingsLayout(null)}
+            onClick={() => setSettingsLayout(SettingsLayout.gridSettings)}
           >
-            {'< Back'}
+            &#8592; Back
           </button>
-          <h1 className="mb-6 text-center font-bold text-lg font-mono">
+          <motion.h1
+            className="mb-6 text-center font-bold text-lg font-mono"
+            key={itemIndex}
+            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0.5, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+          >
             {String(itemIndex).padStart(2, '0')}
-          </h1>
+          </motion.h1>
         </div>
-        <div className="flex align-center justify-between">
-          <p>Row Start</p>
+        <motion.div className="flex align-center justify-between" variants={item}>
+          <p className="text-sm text-center mr-4 font-semibold">Row Start</p>
           <div>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100 w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() =>
                 setRowStart((prev: any) => setIncrementValue(prev))
               }
@@ -73,7 +103,7 @@ function GridLayoutSettings({
               +
             </button>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100  w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() =>
                 setRowStart((prev: any) => setDecrementValue(prev))
               }
@@ -81,12 +111,12 @@ function GridLayoutSettings({
               -
             </button>
           </div>
-        </div>
-        <div className="flex align-center justify-between">
-          <p>Col Start</p>
+        </motion.div>
+        <motion.div className="flex align-center justify-between" variants={item}>
+          <p className="text-sm text-center mr-4 font-semibold">Col Start</p>
           <div>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100 w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() =>
                 setColStart((prev: any) => setIncrementValue(prev))
               }
@@ -94,7 +124,7 @@ function GridLayoutSettings({
               +
             </button>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100 w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() =>
                 setColStart((prev: any) => setDecrementValue(prev))
               }
@@ -102,41 +132,41 @@ function GridLayoutSettings({
               -
             </button>
           </div>
-        </div>
-        <div className="flex align-center justify-between">
-          <p>Col span</p>
+        </motion.div>
+        <motion.div className="flex align-center justify-between" variants={item}>
+          <p className="text-sm text-center mr-4 font-semibold">Col span</p>
           <div>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100 w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() => setColSpan((prev: any) => setIncrementValue(prev))}
             >
               +
             </button>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100 w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() => setColSpan((prev: any) => setDecrementValue(prev))}
             >
               -
             </button>
           </div>
-        </div>
-        <div className="flex align-center justify-between">
-          <p>Row Span</p>
+        </motion.div>
+        <motion.div className="flex align-center justify-between" variants={item}>
+          <p className="text-sm text-center mr-4 font-semibold">Row Span</p>
           <div>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100 w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() => setRowSpan((prev: any) => setIncrementValue(prev))}
             >
               +
             </button>
             <button
-              className="p-2 w-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
+              className="hover:bg-amber-100 w-6 h-6 text-sm rounded-md bg-white shadow-md mr-4 mb-2"
               onClick={() => setRowSpan((prev: any) => setDecrementValue(prev))}
             >
               -
             </button>
           </div>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );
